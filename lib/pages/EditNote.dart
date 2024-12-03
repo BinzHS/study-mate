@@ -4,28 +4,39 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class Addnote extends StatefulWidget {
-  const Addnote({super.key});
+class EditNote extends StatefulWidget {
+  final Map<String, dynamic> note;
+
+  const EditNote({super.key, required this.note});
 
   @override
-  State<Addnote> createState() => _AddnoteState();
+  State<EditNote> createState() => _EditNoteState();
 }
 
 TextEditingController namecontroller = TextEditingController();
-TextEditingController Contentcontroller = TextEditingController();
+TextEditingController contentcontroller = TextEditingController();
 TextEditingController subjectController = TextEditingController();
 String _selectedVisibility = 'Public'; // Default selected option
 
-class _AddnoteState extends State<Addnote> {
+class _EditNoteState extends State<EditNote> {
+  @override
+  void initState() {
+    super.initState();
+    namecontroller.text = widget.note['title'];
+    contentcontroller.text = widget.note['content'];
+    subjectController.text = widget.note['subject'];
+    _selectedVisibility = widget.note['visibility'];
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Add a Note',
+          'Edit Note',
           style: GoogleFonts.poppins(
-            fontSize: 26, // Adjust size as needed
-            fontWeight: FontWeight.bold, // Adjust weight as needed
+            fontSize: 26,
+            fontWeight: FontWeight.bold,
           ),
         ),
         centerTitle: true,
@@ -42,7 +53,7 @@ class _AddnoteState extends State<Addnote> {
           ),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(16.0), // Suitable margins
+          padding: const EdgeInsets.all(16.0),
           child: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -56,13 +67,13 @@ class _AddnoteState extends State<Addnote> {
                         borderRadius: BorderRadius.circular(20.0),
                       ),
                       hintStyle: GoogleFonts.poppins(
-                        color: Colors.black.withOpacity(0.7), // Label color
-                        fontSize: 20.0, // Label font size
-                        fontWeight: FontWeight.bold, // Label font weight
+                        color: Colors.black.withOpacity(0.7),
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold,
                       ),
                       hintText: "Title",
-                      fillColor: Colors.white, // Background color
-                      filled: true, // Enable the background color
+                      fillColor: Colors.white,
+                      filled: true,
                     ),
                   ),
                 ),
@@ -75,34 +86,34 @@ class _AddnoteState extends State<Addnote> {
                         borderRadius: BorderRadius.circular(20.0),
                       ),
                       hintStyle: GoogleFonts.poppins(
-                        color: Colors.black.withOpacity(0.7), // Label color
-                        fontSize: 20.0, // Label font size
-                        fontWeight: FontWeight.bold, // Label font weight
+                        color: Colors.black.withOpacity(0.7),
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold,
                       ),
                       hintText: "Subject",
-                      fillColor: Colors.white, // Background color
-                      filled: true, // Enable the background color
+                      fillColor: Colors.white,
+                      filled: true,
                     ),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0),
                   child: TextField(
-                    controller: Contentcontroller,
-                    maxLines: 10, // Makes the TextField multiline
-                    minLines: 5, // Initial height for the TextField
+                    controller: contentcontroller,
+                    maxLines: 10,
+                    minLines: 5,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(20.0),
                       ),
                       hintStyle: GoogleFonts.poppins(
-                        color: Colors.black.withOpacity(0.7), // Label color
-                        fontSize: 20.0, // Label font size
-                        fontWeight: FontWeight.bold, // Label font weight
+                        color: Colors.black.withOpacity(0.7),
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold,
                       ),
-                      hintText: "Add Note Content",
-                      fillColor: Colors.white, // Background color
-                      filled: true, // Enable the background color
+                      hintText: "Edit Note Content",
+                      fillColor: Colors.white,
+                      filled: true,
                     ),
                   ),
                 ),
@@ -163,93 +174,40 @@ class _AddnoteState extends State<Addnote> {
                       ),
                     ),
                     SizedBox(height: 10.0),
-                    // Text(
-                    //   'Selected: $_selectedVisibility',
-                    //   style: GoogleFonts.poppins(
-                    //     fontSize: 16.0,
-                    //     fontStyle: FontStyle.italic,
-                    //   ),
-                    // ),
                   ],
                 ),
-                ElevatedButton(
-                  onPressed: () async {
-                    print("Pressed");
-                    // Your existing functionality here
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 20),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Expanded(
-                            child: Center(
-                                child: Text("Upload PDF",
-                                    style: GoogleFonts.poppins(
-                                      color: Colors.white,
-                                      fontSize: 30,
-                                      fontWeight: FontWeight.bold,
-                                    )))),
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Colors.grey[200],
-                            shape: BoxShape.circle,
-                          ),
-                          padding: const EdgeInsets.all(8.0),
-                          child: const Icon(
-                            Icons.picture_as_pdf,
-                            color: Colors.black,
-                            size: 30,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () async {
                     try {
                       String title = namecontroller.text.trim();
                       String subject = subjectController.text.trim();
-                      String content = Contentcontroller.text;
+                      String content = contentcontroller.text;
                       String visibility = _selectedVisibility;
                       User? user = FirebaseAuth.instance.currentUser;
-                      print(user);
-                      String uid = user!.uid;
-                      String email = user.email!;
+                      String email = user!.email!;
                       if (title.isNotEmpty &&
                           subject.isNotEmpty &&
                           visibility.isNotEmpty) {
-                        FirebaseFirestore.instance.collection('notes').add({
+                        await FirebaseFirestore.instance
+                            .collection('notes')
+                            .doc(widget.note['id'])
+                            .update({
                           'title': title,
                           'subject': subject,
                           'content': content,
                           'visibility': visibility,
                           'addedBy': email,
                         }).then((value) {
-                          namecontroller.clear();
-                          subjectController.clear();
-                          Contentcontroller.clear();
-
                           AwesomeDialog(
-                              context: context,
-                              dialogType: DialogType.success,
-                              animType: AnimType.scale,
-                              title: 'Success',
-                              desc: 'Note Added Successfully',
-                              btnOkOnPress: () {
-                                namecontroller.clear();
-                                subjectController.clear();
-                                Contentcontroller.clear();
-                              }).show();
+                            context: context,
+                            dialogType: DialogType.success,
+                            animType: AnimType.scale,
+                            title: 'Success',
+                            desc: 'Note Updated Successfully',
+                            btnOkOnPress: () {
+                              Navigator.pop(context);
+                            },
+                          ).show();
                         });
                       } else {
                         AwesomeDialog(
@@ -258,11 +216,7 @@ class _AddnoteState extends State<Addnote> {
                           animType: AnimType.topSlide,
                           title: 'Error',
                           desc: 'Please fill all the fields',
-                          btnOkOnPress: () {
-                            namecontroller.clear();
-                            subjectController.clear();
-                            Contentcontroller.clear();
-                          },
+                          btnOkOnPress: () {},
                           customHeader: const Icon(
                             Icons.error,
                             color: Colors.red,
@@ -288,7 +242,7 @@ class _AddnoteState extends State<Addnote> {
                       children: [
                         Expanded(
                             child: Center(
-                                child: Text("Add Note",
+                                child: Text("Save Changes",
                                     style: GoogleFonts.poppins(
                                       color: Colors.white,
                                       fontSize: 30,
@@ -301,7 +255,7 @@ class _AddnoteState extends State<Addnote> {
                           ),
                           padding: const EdgeInsets.all(8.0),
                           child: const Icon(
-                            Icons.arrow_forward,
+                            Icons.save,
                             color: Colors.black,
                             size: 30,
                           ),

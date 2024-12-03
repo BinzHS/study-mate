@@ -52,7 +52,7 @@ class _NotesState extends State<Notes> {
           showUnselectedLabels: false,
           items: const [
             BottomNavigationBarItem(
-              icon: Icon(Icons.book),
+              icon: Icon(Icons.menu_book_sharp),
               label: "All Notes",
             ),
             BottomNavigationBarItem(
@@ -60,7 +60,7 @@ class _NotesState extends State<Notes> {
               label: "Favourites",
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.note_add_sharp),
+              icon: Icon(Icons.book),
               label: "My Notes",
             ),
           ],
