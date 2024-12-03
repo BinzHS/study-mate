@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:studymate/pages/Signin.dart';
 import 'package:studymate/pages/Signup.dart';
+import 'package:studymate/pages/About.dart';
 
 class Home extends StatelessWidget {
   const Home({super.key});
@@ -152,7 +153,10 @@ class ContactManagementScreen extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const About()),
+                );},
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.black,
                 shape: RoundedRectangleBorder(
