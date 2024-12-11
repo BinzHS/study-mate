@@ -116,39 +116,37 @@ class _FavNotesState extends State<FavNotes> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Center(
-          child: Text(
-            'Favourites',
-            style: GoogleFonts.poppins(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
-            textAlign: TextAlign.center,
+        title: Text(
+          'Favourite Notes',
+          style: GoogleFonts.poppins(
+            // Set the font size (adjust as needed)
+            fontWeight: FontWeight.bold, // Adjust weight if needed
           ),
         ),
+        backgroundColor: const Color(0xFF104D6C),
+        titleTextStyle: const TextStyle(
+          color: Colors.white,
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+        ),
+        iconTheme: const IconThemeData(
+          color: Colors.white, // Set the back arrow color to white
+        ),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const Addnote()),
-              ).then((value) {
-                fetchNotes();
-              });
-            },
+          Padding(
+            padding: const EdgeInsets.only(right: 5.0),
+            child: Image.asset(
+              'assets/appbar_logo.png', // Ensure the logo is in your assets folder
+              height: 70,
+              width: 70,
+            ),
           ),
         ],
       ),
       body: Container(
         width: double.infinity,
         decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/b.jpg'),
-            fit: BoxFit.cover,
-            alignment: Alignment(-0.21, 0),
-            opacity: 0.7,
-          ),
+          
         ),
         child: Padding(
           padding: const EdgeInsets.all(8.0),

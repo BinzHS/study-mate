@@ -12,7 +12,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Select the Language'),
+        title: const Text('Select the Subject'),
         backgroundColor: const Color(0xFF104D6C),
         titleTextStyle: TextStyle(
           color: Colors.white,
@@ -22,7 +22,7 @@ class HomePage extends StatelessWidget {
         actions: [
           Padding(
             padding:
-                const EdgeInsets.only(right: 5.0), // Adjust padding as needed
+                const EdgeInsets.only(right: 5.0), 
             child: Image.asset(
               'assets/appbar_logo.png', // Replace with the actual path to your image
               height: 70, // Adjust the height as needed

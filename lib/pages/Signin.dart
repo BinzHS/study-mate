@@ -69,12 +69,7 @@ class _SigninState extends State<Signin> {
       body: Container(
         width: double.infinity,
         decoration: const BoxDecoration(
-          image: DecorationImage(
-              image: AssetImage('assets/b.jpg'),
-              fit: BoxFit.cover,
-              alignment: Alignment(-0.21, 0),
-              opacity: 0.7 //
-              ),
+         
         ),
         child: Padding(
           padding: EdgeInsets.all(18.0),
@@ -214,7 +209,7 @@ class _SigninState extends State<Signin> {
                   }
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.black,
+                  backgroundColor: Color(0xFF9FB8C4),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
                   ),
@@ -230,7 +225,7 @@ class _SigninState extends State<Signin> {
                           child: Text(
                             "Sign In",
                             style: GoogleFonts.poppins(
-                              color: const Color.fromARGB(255, 207, 197, 197),
+                              color: const Color(0xFF104D6C),
                               fontSize: 30,
                               fontWeight: FontWeight.bold,
                             ),
@@ -239,13 +234,13 @@ class _SigninState extends State<Signin> {
                       ),
                       Container(
                         decoration: BoxDecoration(
-                          color: Colors.grey[200],
+                          color: Color.fromARGB(255, 255, 255, 255),
                           shape: BoxShape.circle,
                         ),
                         padding: const EdgeInsets.all(8.0),
                         child: const Icon(
                           Icons.arrow_forward,
-                          color: Colors.black,
+                          color: Color.fromARGB(255, 0, 0, 0),
                           size: 30,
                         ),
                       ),
@@ -263,7 +258,7 @@ class _SigninState extends State<Signin> {
                   });
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.black,
+                  backgroundColor: Color(0xFF9FB8C4),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
                   ),
@@ -279,7 +274,7 @@ class _SigninState extends State<Signin> {
                           child: Text(
                             "Continue with Google",
                             style: GoogleFonts.poppins(
-                              color: Colors.white,
+                              color: const Color(0xFF104D6C),
                               fontSize: 30,
                               fontWeight: FontWeight.bold,
                             ),

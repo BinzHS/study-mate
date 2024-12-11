@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:studymate/pages/Dashboard.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -132,12 +133,7 @@ class _ProfileState extends State<Profile> {
           : Container(
               width: double.infinity,
               decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage('assets/b.jpg'),
-                  fit: BoxFit.cover,
-                  alignment: Alignment(-0.21, 0),
-                  opacity: 0.7,
-                ),
+                
               ),
               child: Padding(
                 padding: const EdgeInsets.all(18.0),
@@ -225,7 +221,7 @@ class _ProfileState extends State<Profile> {
                         }
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.black,
+                        backgroundColor: Color(0xFF9FB8C4),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30),
                         ),
@@ -241,13 +237,13 @@ class _ProfileState extends State<Profile> {
                                   child: isEditing
                                       ? Text("Update",
                                           style: GoogleFonts.poppins(
-                                            color: Colors.white,
+                                            color: const Color(0xFF104D6C),
                                             fontSize: 30,
                                             fontWeight: FontWeight.bold,
                                           ))
                                       : Text("Update Profile",
                                           style: GoogleFonts.poppins(
-                                            color: Colors.white,
+                                            color: const Color(0xFF104D6C),
                                             fontSize: 30,
                                             fontWeight: FontWeight.bold,
                                           ))),
@@ -269,6 +265,41 @@ class _ProfileState extends State<Profile> {
                       ),
                     ),
                     const SizedBox(height: 50),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => Dashboard()),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Color(0xFF9FB8C4),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 20),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Expanded(
+                              child: Center(
+                                child: Text(
+                                  "Back",
+                                  style: GoogleFonts.poppins(
+                                    color: const Color(0xFF104D6C),
+                                    fontSize: 30,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),

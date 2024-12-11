@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:studymate/pages/About.dart';
 import 'package:studymate/pages/Signin.dart';
 import 'package:studymate/pages/Signup.dart';
 import 'package:studymate/pages/About.dart';
@@ -24,14 +25,7 @@ class ContactManagementScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      decoration: const BoxDecoration(
-        image: DecorationImage(
-            image: AssetImage(''),
-            fit: BoxFit.cover,
-            alignment: Alignment(-0.21, 0),
-            opacity: 0.7 //
-            ),
-      ),
+      decoration: const BoxDecoration(),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -43,7 +37,7 @@ class ContactManagementScreen extends StatelessWidget {
               style: GoogleFonts.poppins(
                 fontSize: 48,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFF104D6C),
+                color: const Color(0xFF104D6C),
               ),
             ),
             Text(
@@ -51,11 +45,15 @@ class ContactManagementScreen extends StatelessWidget {
               style: GoogleFonts.poppins(
                 fontSize: 40,
                 fontWeight: FontWeight.bold,
-                color: Color(0xFF104D6C),
+                color: const Color(0xFF104D6C),
               ),
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: 250),
+            Image.asset(
+              'assets/app_logo.png', // App logo (ensure it exists in your assets)
+              height: 250,
+              width: 250,
+            ),
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
@@ -64,7 +62,7 @@ class ContactManagementScreen extends StatelessWidget {
                 );
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.black,
+                backgroundColor: Color(0xFF9FB8C4),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30),
                 ),
@@ -80,7 +78,7 @@ class ContactManagementScreen extends StatelessWidget {
                         child: Text(
                           "Sign In",
                           style: GoogleFonts.poppins(
-                            color: Colors.white,
+                            color: const Color(0xFF104D6C),
                             fontSize: 30,
                             fontWeight: FontWeight.bold,
                           ),
@@ -95,7 +93,7 @@ class ContactManagementScreen extends StatelessWidget {
                       padding: const EdgeInsets.all(8.0),
                       child: const Icon(
                         Icons.login_rounded,
-                        color: Colors.black,
+                        color: const Color(0xFF104D6C),
                         size: 30,
                       ),
                     ),
@@ -112,7 +110,7 @@ class ContactManagementScreen extends StatelessWidget {
                 );
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.black,
+                backgroundColor: Color(0xFF9FB8C4),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30),
                 ),
@@ -128,7 +126,7 @@ class ContactManagementScreen extends StatelessWidget {
                         child: Text(
                           "Sign Up",
                           style: GoogleFonts.poppins(
-                            color: Colors.white,
+                            color: const Color(0xFF104D6C),
                             fontSize: 30,
                             fontWeight: FontWeight.bold,
                           ),
@@ -143,7 +141,7 @@ class ContactManagementScreen extends StatelessWidget {
                       padding: const EdgeInsets.all(8.0),
                       child: const Icon(
                         Icons.login_outlined,
-                        color: Colors.black,
+                        color: const Color(0xFF104D6C),
                         size: 30,
                       ),
                     ),
@@ -160,7 +158,7 @@ class ContactManagementScreen extends StatelessWidget {
                 );
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.black,
+                backgroundColor: Color(0xFF9FB8C4),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30),
                 ),
@@ -176,7 +174,7 @@ class ContactManagementScreen extends StatelessWidget {
                         child: Text(
                           "About",
                           style: GoogleFonts.poppins(
-                            color: Colors.white,
+                            color: Color.fromARGB(255, 16, 77, 108),
                             fontSize: 30,
                             fontWeight: FontWeight.bold,
                           ),
@@ -191,7 +189,7 @@ class ContactManagementScreen extends StatelessWidget {
                       padding: const EdgeInsets.all(8.0),
                       child: const Icon(
                         Icons.info_outline_rounded,
-                        color: Colors.black,
+                        color: const Color(0xFF104D6C),
                         size: 30,
                       ),
                     ),

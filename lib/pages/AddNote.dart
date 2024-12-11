@@ -3,6 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:studymate/pages/Notes.dart';
+import 'package:studymate/screen/MyNotes.dart';
 
 class Addnote extends StatefulWidget {
   const Addnote({super.key});
@@ -33,14 +35,7 @@ class _AddnoteState extends State<Addnote> {
       ),
       body: Container(
         width: double.infinity,
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/b.jpg'),
-            fit: BoxFit.cover,
-            alignment: Alignment(-0.21, 0),
-            opacity: 0.7,
-          ),
-        ),
+        decoration: const BoxDecoration(),
         child: Padding(
           padding: const EdgeInsets.all(16.0), // Suitable margins
           child: SingleChildScrollView(
@@ -178,7 +173,7 @@ class _AddnoteState extends State<Addnote> {
                     // Your existing functionality here
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black,
+                    backgroundColor: Color(0xFF9FB8C4),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30),
                     ),
@@ -193,7 +188,7 @@ class _AddnoteState extends State<Addnote> {
                             child: Center(
                                 child: Text("Upload PDF",
                                     style: GoogleFonts.poppins(
-                                      color: Colors.white,
+                                      color: const Color(0xFF104D6C),
                                       fontSize: 30,
                                       fontWeight: FontWeight.bold,
                                     )))),
@@ -275,7 +270,7 @@ class _AddnoteState extends State<Addnote> {
                     }
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.black,
+                    backgroundColor: Color(0xFF9FB8C4),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30),
                     ),
@@ -290,7 +285,7 @@ class _AddnoteState extends State<Addnote> {
                             child: Center(
                                 child: Text("Add Note",
                                     style: GoogleFonts.poppins(
-                                      color: Colors.white,
+                                      color: const Color(0xFF104D6C),
                                       fontSize: 30,
                                       fontWeight: FontWeight.bold,
                                     )))),
@@ -311,6 +306,46 @@ class _AddnoteState extends State<Addnote> {
                   ),
                 ),
                 const SizedBox(height: 50),
+                ElevatedButton(
+                  onPressed: () async {
+                    Navigator.pop(context);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xFF9FB8C4),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10, vertical: 20),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Expanded(
+                            child: Center(
+                                child: Text("Back",
+                                    style: GoogleFonts.poppins(
+                                      color: const Color(0xFF104D6C),
+                                      fontSize: 30,
+                                      fontWeight: FontWeight.bold,
+                                    )))),
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Colors.grey[200],
+                            shape: BoxShape.circle,
+                          ),
+                          padding: const EdgeInsets.all(8.0),
+                          child: const Icon(
+                            Icons.arrow_back_ios_new_outlined,
+                            color: Colors.black,
+                            size: 30,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ],
             ),
           ),

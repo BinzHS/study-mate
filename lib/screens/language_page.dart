@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'lessons/language1/lesson1_page.dart';
 import 'lessons/language1/lesson2_page.dart';
 import 'lessons/language1/lesson3_page.dart';
@@ -24,7 +25,8 @@ class LanguagePage extends StatefulWidget {
   _LanguagePageState createState() => _LanguagePageState();
 }
 
-class _LanguagePageState extends State<LanguagePage> with TickerProviderStateMixin {
+class _LanguagePageState extends State<LanguagePage>
+    with TickerProviderStateMixin {
   late AnimationController _animationController;
   late List<Animation<Offset>> _buttonAnimations;
 
@@ -59,9 +61,27 @@ class _LanguagePageState extends State<LanguagePage> with TickerProviderStateMix
 
   // Subject-specific lesson names
   final Map<String, List<String>> lessonNames = {
-    'Language1': ['General Chemistry', 'Inorganic', 'Organic', 'Physical Chemistry', 'Calculations'],
-    'Language2': ['Mechanics', 'Kinematics', 'Dynamics', 'Optics', 'Thermodynamics'],
-    'Language3': ['Algebra', 'Calculus', 'Geometry', 'Probability', 'Statistics'],
+    'Language1': [
+      'General Chemistry',
+      'Inorganic',
+      'Organic',
+      'Physical Chemistry',
+      'Calculations'
+    ],
+    'Language2': [
+      'Mechanics',
+      'Kinematics',
+      'Dynamics',
+      'Optics',
+      'Thermodynamics'
+    ],
+    'Language3': [
+      'Algebra',
+      'Calculus',
+      'Geometry',
+      'Probability',
+      'Statistics'
+    ],
   };
 
   void navigateToLesson(BuildContext context, int lessonIndex) {
@@ -141,9 +161,16 @@ class _LanguagePageState extends State<LanguagePage> with TickerProviderStateMix
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          widget.language == 'Language1' ? 'Chemistry' :
-          widget.language == 'Language2' ? 'Physics' :
-          'Combined Mathematics',
+          widget.language == 'Language1'
+              ? 'Chemistry'
+              : widget.language == 'Language2'
+                  ? 'Physics'
+                  : 'Combined Mathematics',
+          style: GoogleFonts.poppins(
+            fontSize: 16.0, // Set the font size (adjust as needed)
+            fontWeight: FontWeight.w600, // Set font weight (adjust as needed)
+            color: Colors.white, // Set text color (adjust as needed)
+          ),
         ),
         backgroundColor: const Color(0xFF104D6C),
         titleTextStyle: const TextStyle(
@@ -152,16 +179,16 @@ class _LanguagePageState extends State<LanguagePage> with TickerProviderStateMix
           fontWeight: FontWeight.bold,
         ),
         actions: [
-    Padding(
-      padding: const EdgeInsets.only(right: 5.0), // Adjust padding as needed
-      child: Image.asset(
-        'assets/appbar_logo.png', // Replace with the actual path to your image
-        height: 70, // Adjust the height as needed
-        width: 70
-        ,  // Adjust the width as needed
-      ),
-    ),
-  ],
+          Padding(
+            padding:
+                const EdgeInsets.only(right: 5.0), // Adjust padding as needed
+            child: Image.asset(
+              'assets/appbar_logo.png', // Replace with the actual path to your image
+              height: 70, // Adjust the height as needed
+              width: 70, // Adjust the width as needed
+            ),
+          ),
+        ],
       ),
       body: Center(
         child: Padding(
@@ -180,14 +207,19 @@ class _LanguagePageState extends State<LanguagePage> with TickerProviderStateMix
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Color(0xFF9FB8C4),
                       textStyle: const TextStyle(
-                        fontSize: 24,
+                        fontSize: 28,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     onPressed: () => navigateToLesson(context, index + 1),
                     child: Text(
                       currentLessonNames[index],
-                      style: const TextStyle(color: Color(0xFF104D6C)),
+                      style: GoogleFonts.poppins(
+                        color: const Color(0xFF104D6C), // Text color
+                        fontSize: 24.0, // Adjust font size as needed
+                        fontWeight:
+                            FontWeight.bold, // Adjust font weight as needed
+                      ),
                     ),
                   ),
                 ),

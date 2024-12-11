@@ -71,12 +71,7 @@ Future<void> sendEmailVerification() async {
         child: Container(
           width: double.infinity,
           decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('assets/b.jpg'),
-              fit: BoxFit.cover,
-              alignment: Alignment(-0.21, 0),
-              opacity: 0.7,
-            ),
+           
           ),
           child: Padding(
             padding: const EdgeInsets.all(12.0),

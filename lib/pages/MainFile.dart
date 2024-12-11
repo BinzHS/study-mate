@@ -17,7 +17,7 @@ class MainFile extends StatelessWidget {
           if (snapshot.data!.emailVerified == false) {
             return const Emailverification();
           }
-          return const Dashboard();
+          return Dashboard();
         } else {
           return const Home();
         }

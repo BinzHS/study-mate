@@ -8,12 +8,21 @@ class About extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('About'),
+        title: Text(
+          'About StudyMate',
+          style: GoogleFonts.poppins(
+            // Set the font size (adjust as needed)
+            fontWeight: FontWeight.bold, // Adjust weight if needed
+          ),
+        ),
         backgroundColor: const Color(0xFF104D6C),
         titleTextStyle: const TextStyle(
           color: Colors.white,
           fontSize: 20,
           fontWeight: FontWeight.bold,
+        ),
+        iconTheme: const IconThemeData(
+          color: Colors.white, // Set the back arrow color to white
         ),
         actions: [
           Padding(
@@ -134,16 +143,16 @@ class About extends StatelessWidget {
                     ),
                     const SizedBox(height: 8),
                     Center(
-  child: Text(
-    'Binura \n Senavirathna',
-    textAlign: TextAlign.center,
-    style: GoogleFonts.poppins(
-      fontSize: 16,
-      fontWeight: FontWeight.bold,
-      color: const Color(0xFF104D6C),
-    ),
-  ),
-),
+                      child: Text(
+                        'Binura \n Senavirathna',
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.poppins(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: const Color(0xFF104D6C),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
 
@@ -159,17 +168,17 @@ class About extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 8),
-                   Center(
-  child: Text(
-    'Chamod \n Senavirathna',
-    textAlign: TextAlign.center,
-    style: GoogleFonts.poppins(
-      fontSize: 16,
-      fontWeight: FontWeight.bold,
-      color: const Color(0xFF104D6C),
-    ),
-  ),
-),
+                    Center(
+                      child: Text(
+                        'Chamod \n Senavirathna',
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.poppins(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: const Color(0xFF104D6C),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ],

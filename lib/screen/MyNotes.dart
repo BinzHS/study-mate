@@ -93,24 +93,34 @@ class _MyNotesState extends State<MyNotes> {
         title: Text(
           'My Notes',
           style: GoogleFonts.poppins(
-            color: Colors.black,
-            fontSize: 25,
-            fontWeight: FontWeight.bold,
+            // Set the font size (adjust as needed)
+            fontWeight: FontWeight.bold, // Adjust weight if needed
           ),
         ),
-        backgroundColor: Colors.white,
-        centerTitle: true,
-        elevation: 0.0,
+        backgroundColor: const Color(0xFF104D6C),
+        titleTextStyle: const TextStyle(
+          color: Colors.white,
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+        ),
+        iconTheme: const IconThemeData(
+          color: Colors.white, // Set the back arrow color to white
+        ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 5.0),
+            child: Image.asset(
+              'assets/appbar_logo.png', // Ensure the logo is in your assets folder
+              height: 70,
+              width: 70,
+            ),
+          ),
+        ],
       ),
       body: Container(
         width: double.infinity,
         decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/b.jpg'),
-            fit: BoxFit.cover,
-            alignment: Alignment(-0.21, 0),
-            opacity: 0.7,
-          ),
+        
         ),
         child: Padding(
           padding: const EdgeInsets.all(18.0),
@@ -136,7 +146,7 @@ class _MyNotesState extends State<MyNotes> {
                             );
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.black,
+                            backgroundColor: Color(0xFF9FB8C4),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(30),
                             ),
@@ -152,7 +162,7 @@ class _MyNotesState extends State<MyNotes> {
                                     child: Text(
                                       "Add Note",
                                       style: GoogleFonts.poppins(
-                                        color: Colors.white,
+                                        color: const Color(0xFF104D6C),
                                         fontSize: 30,
                                         fontWeight: FontWeight.bold,
                                       ),

@@ -43,7 +43,7 @@ class Signup extends StatelessWidget {
       return userCredential;
     } catch (e) {
       print("Error: $e");
-      return Future.error(e); // Return an error if something goes wrong
+      return Future.error(e); 
     }
   }
 
@@ -79,7 +79,7 @@ class Signup extends StatelessWidget {
                 );
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.black,
+                backgroundColor: Color(0xFF9FB8C4),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30),
                 ),
@@ -95,7 +95,7 @@ class Signup extends StatelessWidget {
                         child: Text(
                           "Sign Up With Email and Password",
                           style: GoogleFonts.poppins(
-                            color: Colors.white,
+                            color:const Color(0xFF104D6C),
                             fontSize: 30,
                             fontWeight: FontWeight.bold,
                           ),
@@ -121,7 +121,7 @@ class Signup extends StatelessWidget {
                 });
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.black,
+                backgroundColor: Color(0xFF9FB8C4),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30),
                 ),
@@ -137,7 +137,7 @@ class Signup extends StatelessWidget {
                         child: Text(
                           "Continue with Google",
                           style: GoogleFonts.poppins(
-                            color: Colors.white,
+                            color: const Color(0xFF104D6C),
                             fontSize: 30,
                             fontWeight: FontWeight.bold,
                           ),
