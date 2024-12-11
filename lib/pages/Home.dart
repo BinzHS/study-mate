@@ -4,6 +4,7 @@ import 'package:studymate/pages/Signin.dart';
 import 'package:studymate/pages/Signup.dart';
 import 'package:studymate/pages/About.dart';
 
+
 class Home extends StatelessWidget {
   const Home({super.key});
 
@@ -42,7 +43,7 @@ class ContactManagementScreen extends StatelessWidget {
               style: GoogleFonts.poppins(
                 fontSize: 48,
                 fontWeight: FontWeight.bold,
-                color: Colors.black,
+                color: Color(0xFF104D6C),
               ),
             ),
             Text(
@@ -50,7 +51,7 @@ class ContactManagementScreen extends StatelessWidget {
               style: GoogleFonts.poppins(
                 fontSize: 40,
                 fontWeight: FontWeight.bold,
-                color: Colors.black,
+                color: Color(0xFF104D6C),
               ),
               textAlign: TextAlign.center,
             ),
@@ -152,10 +153,12 @@ class ContactManagementScreen extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () {Navigator.push(
+              onPressed: () {
+                Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => const About()),
-                );},
+                );
+              },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.black,
                 shape: RoundedRectangleBorder(

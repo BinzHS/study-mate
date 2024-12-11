@@ -7,6 +7,7 @@ import 'package:studymate/pages/Lessons.dart';
 import 'package:studymate/pages/Notes.dart';
 import 'package:studymate/pages/Profile.dart';
 import 'package:studymate/pages/Signin.dart';
+import 'package:studymate/screens/home_page.dart';
 
 void main() {
   runApp(MyApp());
@@ -144,7 +145,7 @@ class _DashboardState extends State<Dashboard> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => Lessons()),
+                                    builder: (context) => HomePage()),
                               );
                             },
                             style: ElevatedButton.styleFrom(
