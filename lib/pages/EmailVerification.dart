@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -14,175 +13,177 @@ class Emailverification extends StatefulWidget {
 }
 
 class _EmailverificationState extends State<Emailverification> {
-  User? user = FirebaseAuth.instance.currentUser;
+  final User? user = FirebaseAuth.instance.currentUser;
   late Timer timer;
+  bool isLoading = false;
 
-@override
-void initState(){
-
-  super.initState();
+  @override
+  void initState() {
+    super.initState();
     sendEmailVerification();
+    startVerificationCheck();
+  }
 
-    // Timer to periodically check for email verification status
-    timer = Timer.periodic(const Duration(seconds: 5), (timer) {
-      FirebaseAuth.instance.currentUser
-          ?.reload(); // Reload user to check for verification status
-
-      if (FirebaseAuth.instance.currentUser!.emailVerified == true) {
-        // Stop the timer once the email is verified
+  void startVerificationCheck() {
+    timer = Timer.periodic(const Duration(seconds: 3), (timer) async {
+      await FirebaseAuth.instance.currentUser?.reload();
+      
+      if (FirebaseAuth.instance.currentUser?.emailVerified == true) {
         timer.cancel();
-
-        // Navigate to the MainFile page
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const MainFile()),
         );
       }
     });
+  }
 
-
-}
-
-Future<void> sendEmailVerification() async {
+  Future<void> sendEmailVerification() async {
+    setState(() => isLoading = true);
     try {
-      await user!.sendEmailVerification();
-      print("Email verification sent to ${user?.email}");
+      await user?.sendEmailVerification();
+      showSuccessDialog('Verification email sent successfully!');
     } catch (e) {
-      print("An error occurred: $e");
+      showErrorDialog('Failed to send verification email. Please try again.');
+    } finally {
+      setState(() => isLoading = false);
     }
   }
 
+  void showSuccessDialog(String message) {
+    AwesomeDialog(
+      context: context,
+      dialogType: DialogType.success,
+      animType: AnimType.scale,
+      title: 'Success',
+      desc: message,
+      btnOkOnPress: () {},
+    ).show();
+  }
 
-    @override
+  void showErrorDialog(String message) {
+    AwesomeDialog(
+      context: context,
+      dialogType: DialogType.error,
+      animType: AnimType.scale,
+      title: 'Error',
+      desc: message,
+      btnOkOnPress: () {},
+    ).show();
+  }
+
+  @override
   void dispose() {
-    timer.cancel(); // Cancel the timer when the widget is disposed
+    timer.cancel();
     super.dispose();
   }
 
-
-
-
-  
   @override
   Widget build(BuildContext context) {
-     return Scaffold(
-      body: Align(
-        alignment: Alignment.center,
-        child: Container(
-          width: double.infinity,
-          decoration: const BoxDecoration(
-           
-          ),
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Color(0xFFE3F2FD),
+            Color(0xFFBBDEFB),
+            Color(0xFF90CAF9),
+          ],
+        ),
+      ),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Please verify your email address. A verification email has been sent to your email address ${user?.email}',
-                    style: GoogleFonts.poppins(
-                      color: const Color.fromARGB(255, 0, 0, 0),
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    textAlign: TextAlign.center,
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(
+                  Icons.mark_email_unread_outlined,
+                  size: 100,
+                  color: Color(0xFF1976D2),
+                ),
+                const SizedBox(height: 32),
+                Text(
+                  'Verify Your Email',
+                  style: GoogleFonts.poppins(
+                    fontSize: 32,
+                    fontWeight: FontWeight.bold,
+                    color: const Color(0xFF1976D2),
                   ),
-                  const SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: () async {
-                      sendEmailVerification();
-                      AwesomeDialog(
-                        context: context,
-                        dialogType: DialogType.success,
-                        animType: AnimType.scale,
-                        title: 'Email Sent',
-                        desc:
-                            'A verification email has been sent to your email address ${user?.email}',
-                        btnOkOnPress: () {},
-                      )..show();
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.black,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 20),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Expanded(
-                              child: Center(
-                                  child: Text("Resend Email",
-                                      style: GoogleFonts.poppins(
-                                        color: Colors.white,
-                                        fontSize: 30,
-                                        fontWeight: FontWeight.bold,
-                                      )))),
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Colors.grey[200],
-                              shape: BoxShape.circle,
-                            ),
-                            padding: const EdgeInsets.all(8.0),
-                            child: const Icon(
-                              Icons.arrow_forward,
-                              color: Colors.black,
-                              size: 30,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  'We\'ve sent a verification email to:\n${user?.email}',
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.poppins(
+                    fontSize: 16,
+                    color: Colors.black87,
                   ),
-                  const SizedBox(height: 20),
-                  ElevatedButton(
-                    onPressed: () async {
-                      await FirebaseAuth.instance.signOut();
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.black,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 20),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Expanded(
-                              child: Center(
-                                  child: Text("Logout",
-                                      style: GoogleFonts.poppins(
-                                        color: Colors.white,
-                                        fontSize: 30,
-                                        fontWeight: FontWeight.bold,
-                                      )))),
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Colors.grey[200],
-                              shape: BoxShape.circle,
-                            ),
-                            padding: const EdgeInsets.all(8.0),
-                            child: const Icon(
-                              Icons.arrow_forward,
-                              color: Colors.black,
-                              size: 30,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                ),
+                const SizedBox(height: 40),
+                _buildActionButton(
+                  title: 'Resend Email',
+                  icon: Icons.refresh,
+                  onPressed: isLoading ? null : sendEmailVerification,
+                ),
+                const SizedBox(height: 16),
+                _buildActionButton(
+                  title: 'Sign Out',
+                  icon: Icons.logout,
+                  onPressed: () => FirebaseAuth.instance.signOut(),
+                  isSecondary: true,
+                ),
+                const SizedBox(height: 24),
+                if (isLoading)
+                  const CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF1976D2)),
                   ),
-                ],
-              ),
+              ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildActionButton({
+    required String title,
+    required IconData icon,
+    required VoidCallback? onPressed,
+    bool isSecondary = false,
+  }) {
+    return SizedBox(
+      width: double.infinity,
+      height: 56,
+      child: ElevatedButton(
+        onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: isSecondary ? Colors.white : const Color(0xFF1976D2),
+          foregroundColor: isSecondary ? const Color(0xFF1976D2) : Colors.white,
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+            side: isSecondary
+                ? const BorderSide(color: Color(0xFF1976D2))
+                : BorderSide.none,
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              title,
+              style: GoogleFonts.poppins(
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(width: 8),
+            Icon(icon),
+          ],
         ),
       ),
     );

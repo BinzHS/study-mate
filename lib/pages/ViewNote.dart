@@ -3,150 +3,313 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class Viewnote extends StatefulWidget {
-  final Map<String, dynamic> note; // Add the note parameter
-
-  const Viewnote({super.key, required this.note}); // Pass note to the widget
+class ViewNote extends StatefulWidget {
+  final Map<String, dynamic> note;
+  const ViewNote({super.key, required this.note});
 
   @override
-  State<Viewnote> createState() => _ViewnoteState();
+  State<ViewNote> createState() => _ViewNoteState();
 }
 
-class _ViewnoteState extends State<Viewnote> {
+class _ViewNoteState extends State<ViewNote> {
+  bool isFavorite = false;
+
   @override
   void initState() {
     super.initState();
     checkIfNoteIsFavorite();
   }
 
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Color(0xFF90CAF9),
+            Color(0xFF64B5F6),
+            Color(0xFF42A5F5),
+            Color(0xFF2196F3),
+          ],
+        ),
+      ),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: _buildAppBar(),
+        body: _buildBody(),
+      ),
+    );
+  }
+
+  AppBar _buildAppBar() {
+    return AppBar(
+      elevation: 0,
+      backgroundColor: Colors.transparent,
+      leading: IconButton(
+        icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+        onPressed: () => Navigator.pop(context),
+      ),
+      actions: [
+        IconButton(
+          icon: Icon(
+            isFavorite ? Icons.favorite : Icons.favorite_border,
+            color: Colors.white,
+          ),
+          onPressed: () => _toggleFavorite(),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildBody() {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(20.0),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.9),
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 10,
+              offset: const Offset(0, 5),
+            ),
+          ],
+        ),
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildHeader(),
+            const SizedBox(height: 24),
+            _buildContent(),
+            const SizedBox(height: 24),
+            _buildAuthorInfo(),
+            const SizedBox(height: 24),
+            _buildActionButtons(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHeader() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          widget.note['title'],
+          style: GoogleFonts.poppins(
+            fontSize: 28,
+            fontWeight: FontWeight.bold,
+            color: const Color(0xFF1976D2),
+          ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          widget.note['subject'],
+          style: GoogleFonts.poppins(
+            fontSize: 18,
+            color: Colors.black54,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildContent() {
+    return Text(
+      widget.note['content'],
+      style: GoogleFonts.poppins(
+        fontSize: 16,
+        height: 1.6,
+        color: Colors.black87,
+      ),
+    );
+  }
+
+  Widget _buildAuthorInfo() {
+    return FutureBuilder<String>(
+      future: getUserFullName(widget.note['addedBy']),
+      builder: (context, snapshot) {
+        return Container(
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.grey[100],
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Row(
+            children: [
+              const Icon(Icons.person, color: Color(0xFF1976D2)),
+              const SizedBox(width: 12),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Added by',
+                    style: GoogleFonts.poppins(
+                      fontSize: 14,
+                      color: Colors.black54,
+                    ),
+                  ),
+                  Text(
+                    snapshot.data ?? 'Loading...',
+                    style: GoogleFonts.poppins(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildActionButtons() {
+    return Column(
+      children: [
+        _buildActionButton(
+          title: isFavorite ? 'Remove from Favorites' : 'Add to Favorites',
+          icon: Icons.favorite,
+          onPressed: _toggleFavorite,
+        ),
+        const SizedBox(height: 16),
+        _buildActionButton(
+          title: 'Download PDF',
+          icon: Icons.download,
+          onPressed: () {
+            // PDF download functionality
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _buildActionButton({
+    required String title,
+    required IconData icon,
+    required VoidCallback onPressed,
+  }) {
+    return ElevatedButton(
+      onPressed: onPressed,
+      style: ElevatedButton.styleFrom(
+        backgroundColor: const Color(0xFF1976D2),
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            title,
+            style: GoogleFonts.poppins(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          ),
+          const SizedBox(width: 12),
+          Icon(icon, color: Colors.white),
+        ],
+      ),
+    );
+  }
+
+  void _toggleFavorite() {
+    if (isFavorite) {
+      removeFromFavorites();
+    } else {
+      addToFavorites(widget.note['id']);
+    }
+  }
+
   Future<void> addToFavorites(String noteId) async {
     try {
-      // Get the current user's email
       User? user = FirebaseAuth.instance.currentUser;
-      if (user == null) {
-        print("No user is logged in");
-        return;
-      }
+      if (user == null) return;
 
       String userEmail = user.email!;
-
-      // Query Firestore to find the user document by email
       QuerySnapshot userSnapshot = await FirebaseFirestore.instance
           .collection('users')
           .where('email', isEqualTo: userEmail)
           .get();
 
-      if (userSnapshot.docs.isEmpty) {
-        print("No user found with this email.");
-        return;
-      }
+      if (userSnapshot.docs.isEmpty) return;
 
-      // Get the document reference of the first (and ideally only) matched user
       DocumentReference userDocRef = userSnapshot.docs.first.reference;
-
-      // Update the user's 'favNotes' field (add noteId if not already in the array)
       await userDocRef.update({
-        'favNotes':
-            FieldValue.arrayUnion([noteId]), // Adds noteId to favNotes array
+        'favNotes': FieldValue.arrayUnion([noteId]),
       });
 
-      print("Note added to favorites successfully!");
+      setState(() {
+        isFavorite = true;
+      });
     } catch (e) {
-      print("Error adding note to favorites: $e");
+      debugPrint("Error adding note to favorites: $e");
     }
   }
 
   Future<void> removeFromFavorites() async {
     try {
-      // Get the current user's email
       User? user = FirebaseAuth.instance.currentUser;
-      if (user == null) {
-        print("No user is logged in");
-        return; // No user logged in, return
-      }
+      if (user == null) return;
 
       String userEmail = user.email!;
-
-      // Query Firestore to find the user document by email
       QuerySnapshot userSnapshot = await FirebaseFirestore.instance
           .collection('users')
           .where('email', isEqualTo: userEmail)
           .get();
 
-      if (userSnapshot.docs.isEmpty) {
-        print("No user found with this email.");
-        return; // No user found, return
-      }
+      if (userSnapshot.docs.isEmpty) return;
 
-      // Get the document reference of the first (and ideally only) matched user
       DocumentSnapshot userDoc = userSnapshot.docs.first;
-
-      // Get the favNotes array from the user document
       List<dynamic> favNotes = userDoc['favNotes'] ?? [];
-      String noteId = widget.note["id"]; // Replace with the actual note ID
+      String noteId = widget.note["id"];
 
-      // Remove the noteId from the favNotes array if it exists
       if (favNotes.contains(noteId)) {
         favNotes.remove(noteId);
-
-        // Update the user's document with the modified favNotes array
         await FirebaseFirestore.instance
             .collection('users')
-            .doc(userDoc.id) // Using the document ID
+            .doc(userDoc.id)
             .update({'favNotes': favNotes});
 
-        // Update the state to reflect the change
         setState(() {
           isFavorite = false;
         });
-
-        print('Note removed from favorites');
       }
     } catch (e) {
-      print("Error removing note from favorites: $e");
+      debugPrint("Error removing note from favorites: $e");
     }
   }
 
-  bool isFavorite = false;
-
   Future<void> checkIfNoteIsFavorite() async {
     try {
-      // Get the current user's email
       User? user = FirebaseAuth.instance.currentUser;
-      if (user == null) {
-        print("No user is logged in");
-        return; // No user logged in, return
-      }
+      if (user == null) return;
 
       String userEmail = user.email!;
-
-      // Query Firestore to find the user document by email
       QuerySnapshot userSnapshot = await FirebaseFirestore.instance
           .collection('users')
           .where('email', isEqualTo: userEmail)
           .get();
 
-      if (userSnapshot.docs.isEmpty) {
-        print("No user found with this email.");
-        return; // No user found, return
-      }
+      if (userSnapshot.docs.isEmpty) return;
 
-      // Get the document reference of the first (and ideally only) matched user
       DocumentSnapshot userDoc = userSnapshot.docs.first;
-
-      // Get the favNotes array from the user document
       List<dynamic> favNotes = userDoc['favNotes'] ?? [];
+      String noteId = widget.note["id"];
 
-      // Assume `noteId` is the ID of the note you want to check
-      String noteId = widget.note["id"]; // Replace with the actual note ID
-
-      // Check if the noteId is in the favNotes array
       setState(() {
-        isFavorite =
-            favNotes.contains(noteId); // Store the result in the variable
+        isFavorite = favNotes.contains(noteId);
       });
     } catch (e) {
-      print("Error checking if note is in favorites: $e");
+      debugPrint("Error checking if note is in favorites: $e");
     }
   }
 
@@ -158,292 +321,15 @@ class _ViewnoteState extends State<Viewnote> {
           .get();
 
       if (userSnapshot.docs.isNotEmpty) {
-        // Get the first matching document
         DocumentSnapshot userDoc = userSnapshot.docs.first;
         String firstName = userDoc['fname'] ?? '';
         String lastName = userDoc['lname'] ?? '';
         return '$firstName $lastName'.trim();
-      } else {
-        return 'User not found';
       }
+      return 'Unknown User';
     } catch (e) {
-      print('Error fetching user data: $e');
+      debugPrint('Error fetching user data: $e');
       return 'Error fetching user data';
     }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    String addedById = widget.note['addedBy'];
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          '',
-          style: TextStyle(fontFamily: 'Poppins'),
-        ), // Title for the page
-        backgroundColor:
-            const Color.fromARGB(255, 255, 255, 255), // AppBar color
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0), // Padding around the content
-        child:
-            // Center the whole column vertically
-            SingleChildScrollView(
-          child: Column(
-            // Center items horizontally
-            children: [
-              // Displaying the Title - Centered horizontally
-              Text(
-                widget.note['title'],
-                style: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Poppins',
-                  color: Colors.black,
-                ),
-                textAlign: TextAlign.center, // Center the title horizontally
-              ),
-              const SizedBox(height: 10),
-
-              // Displaying the Subject - Centered horizontally
-              Text(
-                widget.note['subject'],
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w500,
-                  fontFamily: 'Poppins',
-                  color: Colors.grey[700],
-                ),
-                textAlign: TextAlign.center, // Center the subject horizontally
-              ),
-              const SizedBox(height: 20),
-
-              // Displaying the Content - Left aligned
-              Align(
-                alignment:
-                    Alignment.centerLeft, // Align the content to the left
-                child: Text(
-                  widget.note['content'],
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.normal,
-                    fontFamily: 'Poppins',
-                    color: Colors.black87,
-                    height: 1.5, // Line height to make text more readable
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-
-              // Displaying the Content - Left aligned
-              Align(
-                alignment:
-                    Alignment.centerLeft, // Align the content to the left
-                child: Column(
-                  crossAxisAlignment:
-                      CrossAxisAlignment.start, // Align items to the left
-                  children: [
-                    // Label for "Added by"
-                    Text(
-                      "Added by",
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Poppins',
-                        color: Colors.grey[700],
-                      ),
-                    ),
-                    const SizedBox(
-                        height: 4), // Small space between label and value
-                    // Value for "Added by"
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: FutureBuilder<String>(
-                        future: getUserFullName(addedById),
-                        builder: (context, snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return const Text(
-                              'Loading...',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.normal,
-                                fontFamily: 'Poppins',
-                                color: Colors.grey,
-                              ),
-                            );
-                          } else if (snapshot.hasError) {
-                            return const Text(
-                              'Error loading user data',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.normal,
-                                fontFamily: 'Poppins',
-                                color: Colors.red,
-                              ),
-                            );
-                          } else {
-                            String fullName = snapshot.data ?? 'Unknown User';
-                            return Text(
-                              fullName,
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.normal,
-                                fontFamily: 'Poppins',
-                                color: Colors.black87,
-                                height: 1.5,
-                              ),
-                            );
-                          }
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 20),
-              !isFavorite
-                  ? ElevatedButton(
-                      onPressed: () {
-                        String noteid = widget.note["id"];
-                        addToFavorites(noteid);
-                        setState(() {
-                          isFavorite = true; // Update the UI immediately
-                        });
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.black,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 20),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Expanded(
-                              child: Center(
-                                child: Text(
-                                  "Add to Favourits",
-                                  style: GoogleFonts.poppins(
-                                    color: Colors.white,
-                                    fontSize: 25,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Container(
-                              decoration: BoxDecoration(
-                                color: Colors.grey[200],
-                                shape: BoxShape.circle,
-                              ),
-                              padding: const EdgeInsets.all(8.0),
-                              child: const Icon(
-                                Icons.star,
-                                color: Colors.black,
-                                size: 30,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    )
-                  : ElevatedButton(
-                      onPressed: () {
-                        removeFromFavorites();
-                        checkIfNoteIsFavorite();
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.black,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 20),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Expanded(
-                              child: Center(
-                                child: Text(
-                                  "Remove from Favourits",
-                                  style: GoogleFonts.poppins(
-                                    color: Colors.white,
-                                    fontSize: 25,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Container(
-                              decoration: BoxDecoration(
-                                color: Colors.grey[200],
-                                shape: BoxShape.circle,
-                              ),
-                              padding: const EdgeInsets.all(8.0),
-                              child: const Icon(
-                                Icons.star,
-                                color: Colors.black,
-                                size: 30,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.black,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                ),
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Expanded(
-                        child: Center(
-                          child: Text(
-                            "Download PDF",
-                            style: GoogleFonts.poppins(
-                              color: Colors.white,
-                              fontSize: 30,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.grey[200],
-                          shape: BoxShape.circle,
-                        ),
-                        padding: const EdgeInsets.all(8.0),
-                        child: const Icon(
-                          Icons.download,
-                          color: Colors.black,
-                          size: 30,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
   }
 }
